@@ -5,14 +5,16 @@ let
   inherit (nixpkgs) pkgs;
 
   f = { mkDerivation, attoparsec, base, bytestring, containers
-      , hep-utilities, stdenv, transformers
+      , hep-utilities, pipes, pipes-attoparsec, pipes-bytestring, stdenv
+      , transformers
       }:
       mkDerivation {
         pname = "lhevent";
         version = "0.0.0.0";
         src = ./.;
         libraryHaskellDepends = [
-          attoparsec base bytestring containers hep-utilities transformers
+          attoparsec base bytestring containers hep-utilities pipes
+          pipes-attoparsec pipes-bytestring transformers
         ];
         homepage = "https://github.com/cbpark/lhevent";
         description = "Tools for analyzing the Monte Carlo event data in high energy physics";
