@@ -1,0 +1,15 @@
+resolver: lts-8.21
+
+packages:
+- .
+
+extra-deps: []
+
+flags: {}
+
+extra-package-dbs: []
+
+nix:
+  enable: true
+  pure: true
+  shell-file: shell.nix
