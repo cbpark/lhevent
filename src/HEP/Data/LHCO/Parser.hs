@@ -4,16 +4,13 @@
 module HEP.Data.LHCO.Parser (rawLHCOEvent, lhcoEvent) where
 
 import Control.Monad                    (mzero)
-import Data.Attoparsec.ByteString       (skipWhile)
-import Data.Attoparsec.ByteString.Char8 hiding (skipWhile)
+import Data.Attoparsec.ByteString.Char8
 import Data.Foldable                    (foldl')
 import Data.List                        (sortBy)
 import HEP.Kinematics                   (HasFourMomentum, ptCompare)
 
 import HEP.Data.LHCO.Type
-
-skipTillEnd :: Parser ()
-skipTillEnd = skipWhile (not . isEndOfLine)
+import HEP.Data.ParserUtil              (skipTillEnd)
 
 header :: Parser Header
 header = do skipSpace

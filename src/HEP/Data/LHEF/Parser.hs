@@ -5,14 +5,14 @@ module HEP.Data.LHEF.Parser
       lhefEvent
     , lhefEvents
     , stripLHEF
-    , skipTillEnd
     ) where
 
-import           Data.Attoparsec.ByteString       (skipWhile)
-import           Data.Attoparsec.ByteString.Char8 hiding (skipWhile)
+import           Data.Attoparsec.ByteString.Char8
 import qualified Data.ByteString.Lazy.Char8       as C
 import qualified Data.IntMap                      as M
+
 import           HEP.Data.LHEF.Type
+import           HEP.Data.ParserUtil              (skipTillEnd)
 
 eventInfo :: Parser EventInfo
 eventInfo = do
@@ -67,9 +67,6 @@ lhefEvent = do
   where
     opEvInfo = many' $ char '#' >> skipTillEnd
     finalLine = many' $ string "</LesHouchesEvents>" >> endOfLine
-
-skipTillEnd :: Parser ()
-skipTillEnd = skipWhile (not . isEndOfLine) >> endOfLine
 
 lhefEvents :: Parser [Event]
 lhefEvents = string "<LesHouchesEvents version=" >> many1' lhefEvent

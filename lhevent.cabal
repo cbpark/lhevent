@@ -23,7 +23,9 @@ flag devel
   default:             False
 
 library
-  exposed-modules:     HEP.Data.LHCO
+  exposed-modules:     HEP.Data.HepMC.Parser
+                       HEP.Data.HepMC.Type
+                       HEP.Data.LHCO
                        HEP.Data.LHCO.Parser
                        HEP.Data.LHCO.PipesUtil
                        HEP.Data.LHCO.Type
@@ -31,7 +33,7 @@ library
                        HEP.Data.LHEF.Parser
                        HEP.Data.LHEF.PipesUtil
                        HEP.Data.LHEF.Type
-  -- other-modules:
+  other-modules:       HEP.Data.ParserUtil
   -- other-extensions:
   build-depends:       base             >= 4.9  && < 5
                      , attoparsec       >= 0.12
