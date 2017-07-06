@@ -23,7 +23,11 @@ flag devel
   default:             False
 
 library
-  exposed-modules:     HEP.Data.LHEF
+  exposed-modules:     HEP.Data.LHCO
+                       HEP.Data.LHCO.Parser
+                       HEP.Data.LHCO.PipesUtil
+                       HEP.Data.LHCO.Type
+                       HEP.Data.LHEF
                        HEP.Data.LHEF.Parser
                        HEP.Data.LHEF.PipesUtil
                        HEP.Data.LHEF.Type
@@ -41,6 +45,37 @@ library
   hs-source-dirs:      src
   default-language:    Haskell2010
   ghc-options:         -Wall -Wno-unused-do-bind -O2 -funbox-strict-fields
+
+executable lhco_parse_test
+  main-is:             lhco_parse_test.hs
+  build-depends:       base       >= 4.8
+                     , attoparsec >= 0.12
+                     , bytestring >= 0.10
+                     , lhevent
+  hs-source-dirs:      test
+  default-language:    Haskell2010
+  ghc-options:         -Wall
+  if flag(devel)
+    buildable:         True
+  else
+    buildable:         False
+
+executable lhco_pipesparse_test
+  main-is:             lhco_pipesparse_test.hs
+  build-depends:       base             >= 4.8
+                     , bytestring       >= 0.10
+                     , pipes            >= 4.1
+                     , pipes-attoparsec >= 0.5
+                     , pipes-bytestring >= 2.1
+                     , transformers     >= 0.3
+                     , lhevent
+  hs-source-dirs:      test
+  default-language:    Haskell2010
+  ghc-options:         -Wall
+  if flag(devel)
+    buildable:         True
+  else
+    buildable:         False
 
 executable lhef_parse_test
   main-is:             lhef_parse_test.hs

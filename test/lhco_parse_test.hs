@@ -6,24 +6,26 @@ import           Data.ByteString.Lazy.Char8      (ByteString)
 import qualified Data.ByteString.Lazy.Char8      as C
 import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure)
-import           System.IO
+import           System.IO                       (IOMode (..), withFile)
 
-import           HEP.Data.LHEF
+import           HEP.Data.LHCO
 
 main :: IO ()
 main = do
     args <- getArgs
     when (length args /= 1) $ do
-           putStrLn "Usage: lhef_test_parse filename"
-           exitFailure
+      putStrLn "Usage: lhco_parse_test filename"
+      exitFailure
 
     let infile = head args
-    putStrLn $ "-- Parsing " ++ show infile ++ "."
+    putStrLn $ "-- Reading " ++ show infile ++ "."
     withFile infile ReadMode $ \inh -> do evstr <- C.hGetContents inh
                                           parseAndPrint evstr
 
+    putStrLn "-- Done parsing."
+
 parseAndPrint :: ByteString -> IO ()
-parseAndPrint str = case parse lhefEvent str of
-                        Fail r _ _               -> C.putStrLn r
-                        Done unused evParsed -> do print evParsed
-                                                   parseAndPrint unused
+parseAndPrint str = case parse lhcoEvent str of
+                        Fail r _ _         -> C.putStrLn r
+                        Done unused result -> do print result
+                                                 parseAndPrint unused
