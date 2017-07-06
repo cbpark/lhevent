@@ -12,6 +12,8 @@ let
         pname = "lhevent";
         version = "0.0.0.0";
         src = ./.;
+        isLibrary = true;
+        isExecutable = false;
         libraryHaskellDepends = [
           attoparsec base bytestring containers hep-utilities pipes
           pipes-attoparsec pipes-bytestring transformers
