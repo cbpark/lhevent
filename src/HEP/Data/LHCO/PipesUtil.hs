@@ -1,3 +1,16 @@
+--------------------------------------------------------------------------------
+-- |
+-- Module      :  HEP.Data.LHCO.PipesUtil
+-- Copyright   :  (c) 2017 Chan Beom Park
+-- License     :  BSD-style
+-- Maintainer  :  Chan Beom Park <cbpark@gmail.com>
+-- Stability   :  experimental
+-- Portability :  GHC
+--
+-- Helper functions for analyses of LHCO data files using pipes.
+--
+--------------------------------------------------------------------------------
+
 module HEP.Data.LHCO.PipesUtil
        (
          getLHCOEvent
