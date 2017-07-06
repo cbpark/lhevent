@@ -1,3 +1,5 @@
+{-# LANGUAGE StrictData #-}
+
 module HEP.Data.LHEF.Type where
 
 import Data.IntMap                         (IntMap)
