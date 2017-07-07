@@ -4,7 +4,7 @@ module HEP.Data.HepMC.Type where
 
 import Data.ByteString.Char8 (ByteString)
 
-data GenEvnet = GenEvent { -- | event number
+data GenEvent = GenEvent { -- | event number
                            eventNumber         :: Int
                            -- | number of multi paricle interactions
                          , numMultiParticleInt :: Int
@@ -26,7 +26,16 @@ data GenEvnet = GenEvent { -- | event number
                          , randomStateList     :: Maybe (Int, [Int])
                            -- | weight list (may be zero)
                          , weightList          :: Maybe (Int, [Double])
+                         , eventHeader         :: EventHeader
+                         , vertices            :: [GenVertex]
                          } deriving Show
+
+data EventHeader = EventHeader { weightInfo       :: Maybe WeightNames
+                               , unitInfo         :: Maybe MomentumPositionUnit
+                               , crossSectionInfo :: Maybe GenCrossSection
+                               , heavyIonInfo     :: Maybe HeavyIon
+                               , pdfInfo          :: Maybe PdfInfo
+                               } deriving Show
 
 data WeightNames = WeightNames { -- | number of entries in weight name list
                                  numEntries  :: Int
@@ -104,6 +113,7 @@ data GenVertex = GenVertex { -- | barcode
                            , numOutgoing :: Int
                              -- | list of weights (may be zero)
                            , vWeightList :: Maybe (Int, [Double])
+                           , particles   :: [GenParticle]
                            } deriving Show
 
 data GenParticle = GenParticle { -- | barcode
