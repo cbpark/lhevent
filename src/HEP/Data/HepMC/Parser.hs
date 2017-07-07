@@ -1,21 +1,101 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards   #-}
 
-module HEP.Data.HepMC.Parser where
+module HEP.Data.HepMC.Parser
+    (
+      hepmcHeader
+    , hepmcEvent
+    ) where
 
 import Control.Applicative              ((<|>))
-import Control.Monad                    (replicateM)
+import Control.Monad                    (replicateM, void)
 import Data.Attoparsec.ByteString.Char8
+import Data.Maybe                       (isJust)
+import Data.Monoid                      (All (..))
 import Prelude                          hiding (takeWhile)
 
 import HEP.Data.HepMC.Type
 import HEP.Data.ParserUtil              (skipTillEnd)
+
+hepmcHeader :: Parser Version
+hepmcHeader = do
+    skipSpace
+    v <- hepmcVersion <* skipSpace
+    _ <- beginBlock   <* skipSpace
+    return v
+  where
+    hepmcVersion =
+        string "HepMC::Version" >> skipSpace >> takeWhile (not . isSpace)
+    beginBlock = void (string "HepMC::IO_GenEvent-START_EVENT_LISTING")
+
+hepmcEvent :: Parser GenEvent
+hepmcEvent = lineE
+             <*> header (EventHeader Nothing Nothing Nothing Nothing Nothing)
+             <*> many1' vertexParticles
+  where
+    vertexParticles :: Parser GenVertex
+    vertexParticles = lineV <*> many1' lineP
+
+header :: EventHeader -> Parser EventHeader
+header h@EventHeader {..} =
+    if isFilled
+    then return h
+    else do s <- satisfy (inClass "NUCHF")
+            case s of
+                'N' -> lineN >>= \r -> header (h { weightInfo       = Just r })
+                'U' -> lineU >>= \r -> header (h { unitInfo         = Just r })
+                'C' -> lineC >>= \r -> header (h { crossSectionInfo = Just r })
+                'H' -> lineH >>= \r -> header (h { heavyIonInfo     = Just r })
+                'F' -> lineF >>= \r -> header (h { pdfInfo          = Just r })
+                _   -> return h
+         <|> return h
+  where
+      isFilled = (getAll . mconcat . map All) [ isJust weightInfo
+                                              , isJust unitInfo
+                                              , isJust crossSectionInfo
+                                              , isJust heavyIonInfo
+                                              , isJust pdfInfo
+                                              ]
+
+lineE :: Parser (EventHeader -> [GenVertex] -> GenEvent)
+lineE = do
+    char 'E' >> skipSpace
+    evnum  <- decimal        <* skipSpace
+    nmint  <- signed decimal <* skipSpace
+    esc    <- double         <* skipSpace
+    aqcd   <- double         <* skipSpace
+    aqed   <- double         <* skipSpace
+    sid    <- decimal        <* skipSpace
+    bcd    <- signed decimal <* skipSpace
+    nvtx   <- decimal        <* skipSpace
+    bcdbm1 <- decimal        <* skipSpace
+    bcdbm2 <- decimal        <* skipSpace
+    rnum   <- decimal        <* skipSpace
+    rList' <- replicateM rnum (skipSpace *> decimal)
+    wgtnum <- decimal
+    wList' <- replicateM wgtnum (skipSpace *> double)
+    skipTillEnd >> endOfLine
+    return $ \h vs -> GenEvent { eventNumber         = evnum
+                               , numMultiParticleInt = nmint
+                               , eventScale          = esc
+                               , alphaQCD            = aqcd
+                               , alphaQED            = aqed
+                               , signalProcId        = sid
+                               , signalProcVertex    = bcd
+                               , numVertex           = nvtx
+                               , beamParticles       = (bcdbm1, bcdbm2)
+                               , randomStateList     = mkList rnum rList'
+                               , weightList          = mkList wgtnum wList'
+                               , eventHeader         = h
+                               , vertices            = vs
+                               }
 
 lineN :: Parser WeightNames
 lineN = do
     skipSpace
     n     <- decimal <* skipSpace
     wstrs <- replicateM n (skipSpace *> weightStrings)
-    skipTillEnd
+    skipTillEnd >> endOfLine
     return (WeightNames n wstrs)
   where
     weightStrings = char '"' *> takeWhile (/= '"') <* char '"'
@@ -26,7 +106,7 @@ lineU = do
     mUnit <- (string "GEV" >> return GeV) <|> (string "MEV" >> return MeV)
     skipSpace
     lUnit <- (string "MM" >> return MM) <|> (string "CM" >> return CM)
-    skipTillEnd
+    skipTillEnd >> endOfLine
     return (MomentumPositionUnit mUnit lUnit)
 
 lineC :: Parser GenCrossSection
@@ -34,7 +114,7 @@ lineC = do
     skipSpace
     xs  <- double <* skipSpace
     err <- double
-    skipTillEnd
+    skipTillEnd >> endOfLine
     return (GenCrossSection xs err)
 
 lineH :: Parser HeavyIon
@@ -53,7 +133,7 @@ lineH = do
     epangle     <- double  <* skipSpace
     ecc         <- double  <* skipSpace
     inelstcxsec <- double
-    skipTillEnd
+    skipTillEnd >> endOfLine
     return HeavyIon { numHardScattering             = nhsc
                     , numProjectileParticipants     = npp
                     , numTargetParticipants         = ntp
@@ -81,7 +161,7 @@ lineF = do
     xfx2  <- double         <* skipSpace
     id1   <- signed decimal <* skipSpace
     id2   <- signed decimal
-    skipTillEnd
+    skipTillEnd >> endOfLine
     return PdfInfo { flavor           = (f1, f2)
                    , beamMomentumFrac = (bx1, bx2)
                    , scaleQPDF        = sqpdf
@@ -89,7 +169,7 @@ lineF = do
                    , idLHAPDF         = (id1, id2)
                    }
 
-lineV :: Parser GenVertex
+lineV :: Parser ([GenParticle] -> GenVertex)
 lineV = do
     char 'V' >> skipSpace
     vbcd     <- signed decimal <* skipSpace
@@ -102,15 +182,15 @@ lineV = do
     nouts    <- decimal        <* skipSpace
     nwgts    <- decimal
     wgts     <- replicateM nwgts (skipSpace *> double)
-    let wList = if nwgts > 0 then Just (nwgts, wgts) else Nothing
-    skipTillEnd
-    return GenVertex { vbarcode    = vbcd
-                     , vid         = vid'
-                     , vposition   = (vx, vy, vz, vctau)
-                     , numOrphan   = norphans
-                     , numOutgoing = nouts
-                     , vWeightList = wList
-                     }
+    skipTillEnd >> endOfLine
+    return $ \ps -> GenVertex { vbarcode    = vbcd
+                              , vid         = vid'
+                              , vposition   = (vx, vy, vz, vctau)
+                              , numOrphan   = norphans
+                              , numOutgoing = nouts
+                              , vWeightList = mkList nwgts wgts
+                              , particles = ps
+                              }
 
 lineP :: Parser GenParticle
 lineP = do
@@ -130,8 +210,7 @@ lineP = do
     fList' <- replicateM nflows
               ((,) <$> (skipSpace *> signed decimal <* skipSpace)
                    <*> signed decimal)
-    let fList = if nflows > 0 then Just (nflows, fList') else Nothing
-    skipTillEnd
+    skipTillEnd >> endOfLine
     return GenParticle { pbarcode             = pbcd
                        , pdgID                = pid'
                        , pMomentum            = (px, py, pz, pe)
@@ -139,5 +218,8 @@ lineP = do
                        , statusCode           = scode
                        , polarization         = (polTh, polPh)
                        , vbarcodeThisIncoming = vbcd
-                       , flows                = fList
+                       , flows                = mkList nflows fList'
                        }
+
+mkList :: Int -> [a] -> Maybe (Int, [a])
+mkList n ls = if n > 0 then Just (n, ls) else Nothing

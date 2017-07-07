@@ -23,7 +23,8 @@ flag devel
   default:             False
 
 library
-  exposed-modules:     HEP.Data.HepMC.Parser
+  exposed-modules:     HEP.Data.HepMC
+                       HEP.Data.HepMC.Parser
                        HEP.Data.HepMC.Type
                        HEP.Data.LHCO
                        HEP.Data.LHCO.Parser
@@ -46,7 +47,24 @@ library
                      , transformers     >= 0.3
   hs-source-dirs:      src
   default-language:    Haskell2010
-  ghc-options:         -Wall -Wno-unused-do-bind -O2 -funbox-strict-fields
+  if flag(devel)
+    ghc-options: -O2 -funbox-strict-fields
+  else
+    ghc-options: -Wall -Wno-unused-do-bind -O0
+
+executable hepmc_parse_test
+  main-is:             hepmc_parse_test.hs
+  build-depends:       base       >= 4.8
+                     , attoparsec >= 0.12
+                     , bytestring >= 0.10
+                     , lhevent
+  hs-source-dirs:      test
+  default-language:    Haskell2010
+  ghc-options:         -Wall
+  if flag(devel)
+    buildable:         True
+  else
+    buildable:         False
 
 executable lhco_parse_test
   main-is:             lhco_parse_test.hs

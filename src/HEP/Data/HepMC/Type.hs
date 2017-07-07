@@ -134,3 +134,5 @@ data GenParticle = GenParticle { -- | barcode
                                  -- | flow list (may be zero)
                                , flows                :: Maybe (Int, [(Int, Int)])
                                } deriving Show
+
+type Version = ByteString

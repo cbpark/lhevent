@@ -112,7 +112,10 @@ instance HasFourMomentum (PhyObj Photon) where
     {-# INLINE eta #-}
 
     phi (ObjPhoton (Track (_, ph, _))) = ph
+    {-# INLINE phi #-}
+
     mass _ = 0
+    {-# INLINE mass #-}
 
 instance HasFourMomentum (PhyObj Electron) where
     fourMomentum (ObjElectron (Track (e, ph, p)) _) = setEtaPhiPtM e ph p 0
@@ -125,7 +128,10 @@ instance HasFourMomentum (PhyObj Electron) where
     {-# INLINE eta #-}
 
     phi (ObjElectron (Track (_, ph, _)) _) = ph
+    {-# INLINE phi #-}
+
     mass _ = 0
+    {-# INLINE mass #-}
 
 instance HasFourMomentum (PhyObj Muon) where
     fourMomentum (ObjMuon (Track (e, ph, p)) m _) = setEtaPhiPtM e ph p m
