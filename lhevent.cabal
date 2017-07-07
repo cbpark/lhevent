@@ -25,6 +25,7 @@ flag devel
 library
   exposed-modules:     HEP.Data.HepMC
                        HEP.Data.HepMC.Parser
+                       HEP.Data.HepMC.PipesUtil
                        HEP.Data.HepMC.Type
                        HEP.Data.LHCO
                        HEP.Data.LHCO.Parser
