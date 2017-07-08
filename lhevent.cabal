@@ -67,6 +67,20 @@ executable hepmc_parse_test
   else
     buildable:         False
 
+executable hepmc_pipesparse_test
+  main-is:             hepmc_pipesparse_test.hs
+  build-depends:       base       >= 4.8
+                     , bytestring >= 0.10
+                     , pipes      >= 4.1
+                     , lhevent
+  hs-source-dirs:      test
+  default-language:    Haskell2010
+  ghc-options:         -Wall
+  if flag(devel)
+    buildable:         True
+  else
+    buildable:         False
+
 executable lhco_parse_test
   main-is:             lhco_parse_test.hs
   build-depends:       base       >= 4.8
@@ -83,12 +97,9 @@ executable lhco_parse_test
 
 executable lhco_pipesparse_test
   main-is:             lhco_pipesparse_test.hs
-  build-depends:       base             >= 4.8
-                     , bytestring       >= 0.10
-                     , pipes            >= 4.1
-                     , pipes-attoparsec >= 0.5
-                     , pipes-bytestring >= 2.1
-                     , transformers     >= 0.3
+  build-depends:       base       >= 4.8
+                     , bytestring >= 0.10
+                     , pipes      >= 4.1
                      , lhevent
   hs-source-dirs:      test
   default-language:    Haskell2010
@@ -114,9 +125,8 @@ executable lhef_parse_test
 
 executable lhef_pipesparse_test
   main-is:             lhef_pipesparse_test.hs
-  build-depends:       base             >= 4.8
-                     , pipes            >= 4.1
-                     , pipes-bytestring >= 2.1
+  build-depends:       base  >= 4.8
+                     , pipes >= 4.1
                      , lhevent
   hs-source-dirs:      test
   default-language:    Haskell2010

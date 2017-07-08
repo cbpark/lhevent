@@ -4,20 +4,23 @@
 module HEP.Data.LHCO.Parser (rawLHCOEvent, lhcoEvent) where
 
 import Control.Monad                    (mzero)
-import Data.Attoparsec.ByteString.Char8
+import Data.Attoparsec.ByteString       (skipWhile)
+import Data.Attoparsec.ByteString.Char8 hiding (skipWhile)
 import Data.Foldable                    (foldl')
 import Data.List                        (sortBy)
 import HEP.Kinematics                   (HasFourMomentum, ptCompare)
 
 import HEP.Data.LHCO.Type
-import HEP.Data.ParserUtil              (skipTillEnd)
+
+skipTillEnd :: Parser ()
+skipTillEnd = skipWhile (not . isEndOfLine)
 
 header :: Parser Header
 header = do skipSpace
             nev <- decimal <* skipSpace
             tw  <- decimal
             skipTillEnd
-            return Header { lhcoNumEve = nev, lhcoTriggerWord = tw }
+            return (Header nev tw)
 
 object :: Parser RawObject
 object = do skipSpace

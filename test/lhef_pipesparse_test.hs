@@ -1,14 +1,13 @@
 module Main where
 
-import           Control.Monad           (when)
+import           Control.Monad      (when)
 import           Pipes
-import           Pipes.ByteString        (fromHandle)
-import qualified Pipes.Prelude           as P
-import           System.Environment      (getArgs)
-import           System.Exit             (exitFailure)
-import           System.IO               (IOMode (..), withFile)
+import qualified Pipes.Prelude      as P
+import           System.Environment (getArgs)
+import           System.Exit        (exitFailure)
+import           System.IO          (IOMode (..), withFile)
 
-import           HEP.Data.LHEF.PipesUtil (getLHEFEvent)
+import           HEP.Data.LHEF      (getLHEFEvent)
 
 main :: IO ()
 main = do
@@ -20,4 +19,5 @@ main = do
     let infile = head args
     putStrLn $ "-- Parsing " ++ show infile ++ "."
     withFile infile ReadMode $ \hin ->
-      runEffect $ getLHEFEvent (fromHandle hin) >-> P.take 3 >-> P.print
+      runEffect $ getLHEFEvent hin >-> P.take 3 >-> P.print
+    putStrLn "-- Done parsing."

@@ -14,44 +14,26 @@
 module HEP.Data.LHEF.PipesUtil
        (
          getLHEFEvent
-       , eventEntry
-       , eventEntryFromHandle
-       , eventEntryFromBS
        , initialStates
        , finalStates
        , groupByMother
        ) where
 
-import           Control.Monad                    (forever)
-import           Control.Monad.Trans.State.Strict (StateT (..))
-import           Data.ByteString.Char8            (ByteString)
-import           Data.Function                    (on)
-import qualified Data.IntMap                      as M
-import           Data.List                        (groupBy)
+import           Control.Monad        (forever)
+import           Data.Function        (on)
+import qualified Data.IntMap          as M
+import           Data.List            (groupBy)
 import           Pipes
-import           Pipes.Attoparsec                 (parse)
-import           Pipes.ByteString                 (fromHandle)
-import qualified Pipes.Prelude                    as P
-import           System.IO                        (Handle)
+import           Pipes.ByteString     (fromHandle)
+import qualified Pipes.Prelude        as P
+import           System.IO            (Handle)
 
-import           HEP.Data.LHEF.Parser             (lhefEvent)
+import           HEP.Data.LHEF.Parser (lhefEvent)
 import           HEP.Data.LHEF.Type
+import           HEP.Data.ParserUtil  (parseEvent)
 
-getLHEFEvent :: Monad m => Producer ByteString m () -> Producer Event m ()
-getLHEFEvent s = do (r, s') <- lift $ runStateT (parse lhefEvent) s
-                    case r of Just (Right ev) -> yield ev >> getLHEFEvent s'
-                              _               -> return ()
-
-eventEntry :: Monad m
-           => (a -> Producer ByteString m ()) -> a -> Producer EventEntry m ()
-eventEntry f = eventEntry' . f
-  where eventEntry' s = getLHEFEvent s >-> P.map snd
-
-eventEntryFromBS :: Monad m => ByteString -> Producer EventEntry m ()
-eventEntryFromBS = eventEntry yield
-
-eventEntryFromHandle :: MonadIO m => Handle -> Producer EventEntry m ()
-eventEntryFromHandle = eventEntry fromHandle
+getLHEFEvent :: MonadIO m => Handle -> Producer Event m ()
+getLHEFEvent = parseEvent lhefEvent . fromHandle
 
 getParticles :: Monad m => (Particle -> Bool) -> Pipe EventEntry [Particle] m ()
 getParticles f = forever $ particles >-> getSome

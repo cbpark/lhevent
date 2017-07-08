@@ -15,7 +15,9 @@ module HEP.Data.HepMC
     (
       module HP
     , module HT
+    , module HPU
     ) where
 
-import HEP.Data.HepMC.Parser as HP
-import HEP.Data.HepMC.Type   as HT
+import HEP.Data.HepMC.Parser    as HP
+import HEP.Data.HepMC.PipesUtil as HPU
+import HEP.Data.HepMC.Type      as HT

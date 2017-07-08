@@ -16,6 +16,7 @@ module HEP.Data.LHEF
     (
       module LT
     , module LP
+    , module LPU
     , module HK
     , module LV
     , module TV
@@ -39,6 +40,7 @@ import           HEP.Kinematics.Vector.LorentzVector  as LV (setEtaPhiPtM,
 import           HEP.Particle.ID                      as PI
 
 import           HEP.Data.LHEF.Parser                 as LP
+import           HEP.Data.LHEF.PipesUtil              as LPU (getLHEFEvent)
 import           HEP.Data.LHEF.Type                   as LT
 
 energyOf :: Particle -> Double

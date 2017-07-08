@@ -74,7 +74,7 @@ lineE = do
     rList' <- replicateM rnum (skipSpace *> decimal)
     wgtnum <- decimal
     wList' <- replicateM wgtnum (skipSpace *> double)
-    skipTillEnd >> endOfLine
+    skipTillEnd
     return $ \h vs -> GenEvent { eventNumber         = evnum
                                , numMultiParticleInt = nmint
                                , eventScale          = esc
@@ -95,7 +95,7 @@ lineN = do
     skipSpace
     n     <- decimal <* skipSpace
     wstrs <- replicateM n (skipSpace *> weightStrings)
-    skipTillEnd >> endOfLine
+    skipTillEnd
     return (WeightNames n wstrs)
   where
     weightStrings = char '"' *> takeWhile (/= '"') <* char '"'
@@ -106,7 +106,7 @@ lineU = do
     mUnit <- (string "GEV" >> return GeV) <|> (string "MEV" >> return MeV)
     skipSpace
     lUnit <- (string "MM" >> return MM) <|> (string "CM" >> return CM)
-    skipTillEnd >> endOfLine
+    skipTillEnd
     return (MomentumPositionUnit mUnit lUnit)
 
 lineC :: Parser GenCrossSection
@@ -114,7 +114,7 @@ lineC = do
     skipSpace
     xs  <- double <* skipSpace
     err <- double
-    skipTillEnd >> endOfLine
+    skipTillEnd
     return (GenCrossSection xs err)
 
 lineH :: Parser HeavyIon
@@ -133,7 +133,7 @@ lineH = do
     epangle     <- double  <* skipSpace
     ecc         <- double  <* skipSpace
     inelstcxsec <- double
-    skipTillEnd >> endOfLine
+    skipTillEnd
     return HeavyIon { numHardScattering             = nhsc
                     , numProjectileParticipants     = npp
                     , numTargetParticipants         = ntp
@@ -161,7 +161,7 @@ lineF = do
     xfx2  <- double         <* skipSpace
     id1   <- signed decimal <* skipSpace
     id2   <- signed decimal
-    skipTillEnd >> endOfLine
+    skipTillEnd
     return PdfInfo { flavor           = (f1, f2)
                    , beamMomentumFrac = (bx1, bx2)
                    , scaleQPDF        = sqpdf
@@ -182,7 +182,7 @@ lineV = do
     nouts    <- decimal        <* skipSpace
     nwgts    <- decimal
     wgts     <- replicateM nwgts (skipSpace *> double)
-    skipTillEnd >> endOfLine
+    skipTillEnd
     return $ \ps -> GenVertex { vbarcode    = vbcd
                               , vid         = vid'
                               , vposition   = (vx, vy, vz, vctau)
@@ -210,7 +210,7 @@ lineP = do
     fList' <- replicateM nflows
               ((,) <$> (skipSpace *> signed decimal <* skipSpace)
                    <*> signed decimal)
-    skipTillEnd >> endOfLine
+    skipTillEnd
     return GenParticle { pbarcode             = pbcd
                        , pdgID                = pid'
                        , pMomentum            = (px, py, pz, pe)
