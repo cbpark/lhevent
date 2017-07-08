@@ -13,7 +13,7 @@ See codes in [test](test). If you'd use [pipes](http://hackage.haskell.org/packa
 ``` haskell
 module Main where
 
-import           Pipes
+import           Pipes              (runEffect, (>->))
 import qualified Pipes.Prelude      as P
 import           System.Environment (getArgs)
 import           System.IO          (IOMode (..), withFile)

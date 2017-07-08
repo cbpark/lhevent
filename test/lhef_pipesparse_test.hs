@@ -1,13 +1,13 @@
 module Main where
 
 import           Control.Monad      (when)
-import           Pipes
+import           Pipes              (runEffect, (>->))
 import qualified Pipes.Prelude      as P
 import           System.Environment (getArgs)
 import           System.Exit        (exitFailure)
 import           System.IO          (IOMode (..), withFile)
 
-import           HEP.Data.LHEF
+import           HEP.Data.LHEF      (getLHEFEvent)
 
 main :: IO ()
 main = do
