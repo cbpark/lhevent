@@ -43,6 +43,9 @@ instance HasFourMomentum Particle where
     pt Particle { pup = (x, y, _, _, _) } = sqrt (x ** 2 + y ** 2)
     {-# INLINE pt #-}
 
+    mass Particle { pup = (_, _, _, _, m) } = m
+    {-# INLINE mass #-}
+
     epxpypz Particle { pup = (x, y, z, e, _) } = (e, x, y, z)
     {-# INLINE epxpypz #-}
 

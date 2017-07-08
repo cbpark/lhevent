@@ -55,7 +55,7 @@ data MomentumPositionUnit = MomentumPositionUnit
                               momentumUnit :: MomentumUnit
                               -- | length units (MM or CM)
                             , lengthUnit   :: LengthUnit
-                            } deriving Show
+                            } deriving (Eq, Show)
 
 data GenCrossSection = GenCrossSection
                        { -- | cross section in pb
@@ -146,6 +146,9 @@ instance HasFourMomentum GenParticle where
 
     pt GenParticle { pMomentum = (x, y, _, _) } = sqrt (x ** 2 + y ** 2)
     {-# INLINE pt #-}
+
+    mass GenParticle { pMass = m } = m
+    {-# INLINE mass #-}
 
     epxpypz GenParticle { pMomentum = (x, y, z, e) } = (e, x, y, z)
     {-# INLINE epxpypz #-}
