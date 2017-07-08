@@ -87,8 +87,7 @@ lineE = do
                                , randomStateList     = mkList rnum rList'
                                , weightList          = mkList wgtnum wList'
                                , eventHeader         = h
-                               , vertices            = vs
-                               }
+                               , vertices            = vs }
 
 lineN :: Parser WeightNames
 lineN = do
@@ -146,8 +145,7 @@ lineH = do
                     , impactParamCollision          = impct
                     , eventPlaneAngle               = epangle
                     , eccentricity                  = ecc
-                    , inelasticXsecNN               = inelstcxsec
-                    }
+                    , inelasticXsecNN               = inelstcxsec }
 
 lineF :: Parser PdfInfo
 lineF = do
@@ -166,8 +164,7 @@ lineF = do
                    , beamMomentumFrac = (bx1, bx2)
                    , scaleQPDF        = sqpdf
                    , xfx              = (xfx1, xfx2)
-                   , idLHAPDF         = (id1, id2)
-                   }
+                   , idLHAPDF         = (id1, id2) }
 
 lineV :: Parser ([GenParticle] -> GenVertex)
 lineV = do
@@ -189,8 +186,7 @@ lineV = do
                               , numOrphan   = norphans
                               , numOutgoing = nouts
                               , vWeightList = mkList nwgts wgts
-                              , particles = ps
-                              }
+                              , particles   = ps }
 
 lineP :: Parser GenParticle
 lineP = do
@@ -210,7 +206,7 @@ lineP = do
     fList' <- replicateM nflows
               ((,) <$> (skipSpace *> signed decimal <* skipSpace)
                    <*> signed decimal)
-    skipTillEnd
+    finalLine >> skipTillEnd
     return GenParticle { pbarcode             = pbcd
                        , pdgID                = pid'
                        , pMomentum            = (px, py, pz, pe)
@@ -218,8 +214,8 @@ lineP = do
                        , statusCode           = scode
                        , polarization         = (polTh, polPh)
                        , vbarcodeThisIncoming = vbcd
-                       , flows                = mkList nflows fList'
-                       }
+                       , flows                = mkList nflows fList' }
+  where finalLine = many' $ string "HepMC::IO_GenEvent-END_EVENT_LISTING"
 
 mkList :: Int -> [a] -> Maybe (Int, [a])
 mkList n ls = if n > 0 then Just (n, ls) else Nothing

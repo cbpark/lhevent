@@ -43,8 +43,8 @@ data WeightNames = WeightNames { -- | number of entries in weight name list
                                , weightNames :: [ByteString]
                                } deriving Show
 
-data MomentumUnit = GeV | MeV deriving Show
-data LengthUnit = MM | CM deriving Show
+data MomentumUnit = GeV | MeV deriving (Eq, Show)
+data LengthUnit = MM | CM deriving (Eq, Show)
 
 data MomentumPositionUnit = MomentumPositionUnit
                             { -- | momentum units (MEV or GEV)
