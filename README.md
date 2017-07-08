@@ -4,7 +4,7 @@ Tools for analyzing data of Monte Carlo event generators in high energy physics 
 
 ### Prerequisite
 
-[hep-utilities](https://github.com/cbpark/hep-utilities) is required (not uploaded to [Hackage](https://hackage.haskell.org) nor [Stackage](https://hackage.haskell.org) yet).
+[hep-utilities](https://github.com/cbpark/hep-utilities) is required (not uploaded to [Hackage](https://hackage.haskell.org) nor [Stackage](https://www.stackage.org) yet).
 
 For [Nix](https://hackage.haskell.org) users, see [`default.nix`](default.nix).
 
