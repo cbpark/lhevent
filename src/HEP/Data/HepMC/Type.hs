@@ -2,7 +2,11 @@
 
 module HEP.Data.HepMC.Type where
 
-import Data.ByteString.Char8 (ByteString)
+import Data.ByteString.Char8               (ByteString)
+import HEP.Kinematics                      (HasFourMomentum (..))
+import HEP.Kinematics.Vector.LorentzVector (setXYZT)
+
+type Version = ByteString
 
 data GenEvent = GenEvent { -- | event number
                            eventNumber         :: Int
@@ -135,4 +139,31 @@ data GenParticle = GenParticle { -- | barcode
                                , flows                :: Maybe (Int, [(Int, Int)])
                                } deriving Show
 
-type Version = ByteString
+instance HasFourMomentum GenParticle where
+    -- fourMomentum :: GenParticle -> FourMomentum
+    fourMomentum GenParticle { pMomentum = (x, y, z, e) } = setXYZT x y z e
+    {-# INLINE fourMomentum #-}
+
+    pt GenParticle { pMomentum = (x, y, _, _) } = sqrt (x ** 2 + y ** 2)
+    {-# INLINE pt #-}
+
+    epxpypz GenParticle { pMomentum = (x, y, z, e) } = (e, x, y, z)
+    {-# INLINE epxpypz #-}
+
+    pxpypz GenParticle { pMomentum = (x, y, z, _) } = (x, y, z)
+    {-# INLINE pxpypz #-}
+
+    pxpy GenParticle { pMomentum = (x, y, _, _) } = (x, y)
+    {-# INLINE pxpy #-}
+
+    px GenParticle { pMomentum = (x, _, _, _) } = x
+    {-# INLINE px #-}
+
+    py GenParticle { pMomentum = (_, y, _, _) } = y
+    {-# INLINE py #-}
+
+    pz GenParticle { pMomentum = (_, _, z, _) } = z
+    {-# INLINE pz #-}
+
+    energy GenParticle { pMomentum = (_, _, _, e) } = e
+    {-# INLINE energy #-}
