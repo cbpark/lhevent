@@ -7,7 +7,7 @@ import           System.Environment (getArgs)
 import           System.Exit        (exitFailure)
 import           System.IO          (IOMode (..), withFile)
 
-import           HEP.Data.LHEF      (getLHEFEvent)
+import           HEP.Data.LHEF
 
 main :: IO ()
 main = do
@@ -19,5 +19,5 @@ main = do
     let infile = head args
     putStrLn $ "-- Parsing " ++ show infile ++ "."
     withFile infile ReadMode $ \hin ->
-      runEffect $ getLHEFEvent hin >-> P.take 3 >-> P.print
+        runEffect $ getLHEFEvent hin >-> P.take 3 >-> P.print
     putStrLn "-- Done parsing."

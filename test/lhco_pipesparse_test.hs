@@ -19,5 +19,5 @@ main = do
     let infile = head args
     putStrLn $ "-- Parsing " ++ show infile ++ "."
     withFile infile ReadMode $ \hin ->
-      runEffect $ getLHCOEvent hin >-> P.take 3 >-> P.print
+        runEffect $ getLHCOEvent hin >-> P.take 3 >-> P.print
     putStrLn "-- Done parsing."

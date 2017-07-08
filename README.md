@@ -8,7 +8,27 @@ Tools for analyzing data of Monte Carlo event generators in high energy physics 
 
 ## Usage
 
-See [`lhef_parse_test.hs`](test/lhef_parse_test.hs) and [`lhco_parse_test.hs`](test/lhco_parse_test.hs). If you'd use [pipes](http://hackage.haskell.org/package/pipes), see [`HEP.Data.LHEF.PipesUtil`](src/HEP/Data/LHEF/PipesUtil.hs) and [`HEP.Data.LHCO.PipesUtil`](src/HEP/Data/LHCO/PipesUtil.hs).
+See codes in [test](test). If you'd use [pipes](http://hackage.haskell.org/package/pipes), see [`HEP.Data.LHEF.PipesUtil`](src/HEP/Data/LHEF/PipesUtil.hs), [`HEP.Data.LHCO.PipesUtil`](src/HEP/Data/LHCO/PipesUtil.hs), and [`HEP.Data.HepMC.PipesUtil`](src/HEP/Data/HepMC/PipesUtil.hs). For instance,
+
+``` haskell
+module Main where
+
+import           Pipes
+import qualified Pipes.Prelude      as P
+import           System.Environment (getArgs)
+import           System.IO          (IOMode (..), withFile)
+
+import           HEP.Data.LHEF      (getLHEFEvent)
+
+main :: IO ()
+main = do
+    infile <- head <$> getArgs
+    putStrLn $ "-- Parsing " ++ show infile ++ "."
+    withFile infile ReadMode $ \hin ->
+        runEffect $ getLHEFEvent hin >-> P.take 3 >-> P.print
+    putStrLn "-- Done parsing."
+
+```
 
 ## References
 
