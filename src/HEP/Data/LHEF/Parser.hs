@@ -1,5 +1,19 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+--------------------------------------------------------------------------------
+-- |
+-- Module      :  HEP.Data.LHEF.Type
+-- Copyright   :  (c) 2017 Chan Beom Park
+-- License     :  BSD-style
+-- Maintainer  :  Chan Beom Park <cbpark@gmail.com>
+-- Stability   :  experimental
+-- Portability :  GHC
+--
+-- Parsers for HepMC event data. See "HEP.Data.LHEF.PipesUtil" for functions
+-- using pipes.
+--
+--------------------------------------------------------------------------------
+
 module HEP.Data.LHEF.Parser
     (
       lhefEvent

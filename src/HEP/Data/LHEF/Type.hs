@@ -1,5 +1,20 @@
 {-# LANGUAGE StrictData #-}
 
+--------------------------------------------------------------------------------
+-- |
+-- Module      :  HEP.Data.LHEF.Type
+-- Copyright   :  (c) 2017 Chan Beom Park
+-- License     :  BSD-style
+-- Maintainer  :  Chan Beom Park <cbpark@gmail.com>
+-- Stability   :  experimental
+-- Portability :  GHC
+--
+-- Types for LHEF event data.
+--
+-- See <http://arxiv.org/abs/hep-ph/0609017 A standard format for Les Houches Event Files>.
+--
+--------------------------------------------------------------------------------
+
 module HEP.Data.LHEF.Type where
 
 import Data.IntMap                         (IntMap)

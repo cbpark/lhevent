@@ -1,6 +1,20 @@
 {-# LANGUAGE GADTs           #-}
 {-# LANGUAGE RecordWildCards #-}
 
+--------------------------------------------------------------------------------
+-- |
+-- Module      :  HEP.Data.LHCO.Type
+-- Copyright   :  (c) 2017 Chan Beom Park
+-- License     :  BSD-style
+-- Maintainer  :  Chan Beom Park <cbpark@gmail.com>
+-- Stability   :  experimental
+-- Portability :  GHC
+--
+-- Parsers for HepMC event data. See "HEP.Data.LHCO.PipesUtil" for functions
+-- using pipes.
+--
+--------------------------------------------------------------------------------
+
 module HEP.Data.LHCO.Parser (rawLHCOEvent, lhcoEvent) where
 
 import Control.Monad                    (mzero)

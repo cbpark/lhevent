@@ -1,5 +1,18 @@
 {-# LANGUAGE GADTs #-}
 
+--------------------------------------------------------------------------------
+-- |
+-- Module      :  HEP.Data.LHCO
+-- Copyright   :  (c) 2017 Chan Beom Park
+-- License     :  BSD-style
+-- Maintainer  :  Chan Beom Park <cbpark@gmail.com>
+-- Stability   :  experimental
+-- Portability :  GHC
+--
+-- Types and helper functions to analyze LHCO (LHC Olympics) event data.
+--
+--------------------------------------------------------------------------------
+
 module HEP.Data.LHCO
        (
          module LT

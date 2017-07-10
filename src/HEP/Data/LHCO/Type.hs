@@ -2,6 +2,21 @@
 {-# LANGUAGE GADTs             #-}
 {-# LANGUAGE StrictData        #-}
 
+--------------------------------------------------------------------------------
+-- |
+-- Module      :  HEP.Data.LHCO.Type
+-- Copyright   :  (c) 2017 Chan Beom Park
+-- License     :  BSD-style
+-- Maintainer  :  Chan Beom Park <cbpark@gmail.com>
+-- Stability   :  experimental
+-- Portability :  GHC
+--
+-- Types for LHCO event data.
+--
+-- See <http://www.jthaler.net/olympicswiki/doku.php LHC Olympics Wiki>.
+--
+--------------------------------------------------------------------------------
+
 module HEP.Data.LHCO.Type where
 
 import HEP.Kinematics                      (HasFourMomentum (..))

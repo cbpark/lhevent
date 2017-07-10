@@ -1,4 +1,5 @@
 {-# LANGUAGE RecordWildCards #-}
+
 --------------------------------------------------------------------------------
 -- |
 -- Module      :  HEP.Data.LHEF
@@ -8,7 +9,7 @@
 -- Stability   :  experimental
 -- Portability :  GHC
 --
--- Helper functions to use in analyses of LHEF data files.
+-- Helper functions to use in analyses of LHEF (Les Houches Event File) data files.
 --
 --------------------------------------------------------------------------------
 
