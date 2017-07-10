@@ -1,5 +1,20 @@
 {-# LANGUAGE StrictData #-}
 
+--------------------------------------------------------------------------------
+-- |
+-- Module      :  HEP.Data.HepMC.Type
+-- Copyright   :  (c) 2017 Chan Beom Park
+-- License     :  BSD-style
+-- Maintainer  :  Chan Beom Park <cbpark@gmail.com>
+-- Stability   :  experimental
+-- Portability :  GHC
+--
+-- Types for HepMC event data.
+--
+-- See <http://hepmc.web.cern.ch/hepmc/releases/HepMC2_user_manual.pdf HepMC 2 user manual>.
+--
+--------------------------------------------------------------------------------
+
 module HEP.Data.HepMC.Type where
 
 import Data.ByteString.Char8               (ByteString)

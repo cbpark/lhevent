@@ -1,11 +1,21 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
 
-module HEP.Data.HepMC.Parser
-    (
-      hepmcHeader
-    , hepmcEvent
-    ) where
+--------------------------------------------------------------------------------
+-- |
+-- Module      :  HEP.Data.HepMC.Type
+-- Copyright   :  (c) 2017 Chan Beom Park
+-- License     :  BSD-style
+-- Maintainer  :  Chan Beom Park <cbpark@gmail.com>
+-- Stability   :  experimental
+-- Portability :  GHC
+--
+-- Parsers for HepMC event data. See "HEP.Data.HepMC.PipesUtil" for functions
+-- using pipes.
+--
+--------------------------------------------------------------------------------
+
+module HEP.Data.HepMC.Parser (hepmcHeader, hepmcEvent) where
 
 import Control.Applicative              ((<|>))
 import Control.Monad                    (replicateM, void)
@@ -17,6 +27,8 @@ import Prelude                          hiding (takeWhile)
 import HEP.Data.HepMC.Type
 import HEP.Data.ParserUtil              (skipTillEnd)
 
+-- | Parsing the HepMC Header.
+-- This returns the 'Version'.
 hepmcHeader :: Parser Version
 hepmcHeader = do
     skipSpace
@@ -28,6 +40,8 @@ hepmcHeader = do
         string "HepMC::Version" >> skipSpace >> takeWhile (not . isSpace)
     beginBlock = void (string "HepMC::IO_GenEvent-START_EVENT_LISTING")
 
+-- | Parsing the 'GenEvent'.
+-- It has 'GenVertex', which contains 'GenParticle'.
 hepmcEvent :: Parser GenEvent
 hepmcEvent = lineE
              <*> header (EventHeader Nothing Nothing Nothing Nothing Nothing)

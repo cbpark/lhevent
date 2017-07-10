@@ -7,7 +7,7 @@
 -- Stability   :  experimental
 -- Portability :  GHC
 --
--- Helper functions to use in analyses of HepMC data files.
+-- Types and helper functions to analyze HepMC event data.
 --
 --------------------------------------------------------------------------------
 

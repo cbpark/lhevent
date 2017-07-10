@@ -11,7 +11,6 @@
 --
 --------------------------------------------------------------------------------
 
-
 module HEP.Data.HepMC.PipesUtil (getHepMCEvent) where
 
 import           Control.Monad.Trans.State.Strict (execStateT)
@@ -24,6 +23,17 @@ import           HEP.Data.HepMC.Parser            (hepmcEvent, hepmcHeader)
 import           HEP.Data.HepMC.Type              (GenEvent)
 import           HEP.Data.ParserUtil              (parseEvent)
 
+-- | Parsing HepMC event, 'GenEvent'
+--
+-- Example usage:
+--
+-- > import           Pipes
+-- > import qualified Pipes.Prelude            as P
+-- > import           System.IO
+-- > import           HEP.Data.HepMC.PipesUtil (getHepMCEvent)
+-- >
+-- > main = withFile infile ReadMode $ \hin ->
+-- >     runEffect $ getHepMCEvent hin >-> P.print
 getHepMCEvent :: MonadIO m => Handle -> Producer GenEvent m ()
 getHepMCEvent hin = (lift . evStr) hin >>= parseEvent hepmcEvent
   where evStr = execStateT (PA.parse hepmcHeader) . fromHandle
