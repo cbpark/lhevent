@@ -32,6 +32,17 @@ import           HEP.Data.LHEF.Parser (lhefEvent)
 import           HEP.Data.LHEF.Type
 import           HEP.Data.ParserUtil  (parseEvent)
 
+-- | Parsing LHEF event, 'Event'
+--
+-- Example usage:
+--
+-- > import           Pipes
+-- > import qualified Pipes.Prelude            as P
+-- > import           System.IO
+-- > import           HEP.Data.LHEF.PipesUtil  (getLHEFEvent)
+-- >
+-- > main = withFile infile ReadMode $ \hin ->
+-- >     runEffect $ getLHEFEvent hin >-> P.print
 getLHEFEvent :: MonadIO m => Handle -> Producer Event m ()
 getLHEFEvent = parseEvent lhefEvent . fromHandle
 
