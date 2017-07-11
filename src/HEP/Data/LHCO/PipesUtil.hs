@@ -26,11 +26,14 @@ import HEP.Data.ParserUtil  (parseEvent)
 -- Example usage:
 --
 -- > import           Pipes
--- > import qualified Pipes.Prelude            as P
+-- > import qualified Pipes.Prelude      as P
+-- > import           System.Environment
 -- > import           System.IO
--- > import           HEP.Data.LHCO.PipesUtil  (getLHCOEvent)
+-- > import           HEP.Data.LHCO      (getLHCOEvent)
 -- >
--- > main = withFile infile ReadMode $ \hin ->
--- >     runEffect $ getLHCOEvent hin >-> P.print
+-- > main = do
+-- >     infile <- head <$> getArgs
+-- >     withFile infile ReadMode $ \hin ->
+-- >         runEffect $ getLHCOEvent hin >-> P.print
 getLHCOEvent :: MonadIO m => Handle -> Producer Event m ()
 getLHCOEvent = parseEvent lhcoEvent . fromHandle

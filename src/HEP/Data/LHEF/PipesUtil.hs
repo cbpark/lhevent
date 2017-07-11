@@ -37,12 +37,15 @@ import           HEP.Data.ParserUtil  (parseEvent)
 -- Example usage:
 --
 -- > import           Pipes
--- > import qualified Pipes.Prelude            as P
+-- > import qualified Pipes.Prelude      as P
+-- > import           System.Environment
 -- > import           System.IO
--- > import           HEP.Data.LHEF.PipesUtil  (getLHEFEvent)
+-- > import           HEP.Data.LHEF      (getLHEFEvent)
 -- >
--- > main = withFile infile ReadMode $ \hin ->
--- >     runEffect $ getLHEFEvent hin >-> P.print
+-- > main = do
+-- >     infile <- head <$> getArgs
+-- >     withFile infile ReadMode $ \hin ->
+-- >         runEffect $ getLHEFEvent hin >-> P.print
 getLHEFEvent :: MonadIO m => Handle -> Producer Event m ()
 getLHEFEvent = parseEvent lhefEvent . fromHandle
 

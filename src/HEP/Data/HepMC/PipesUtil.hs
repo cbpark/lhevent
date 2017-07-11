@@ -28,12 +28,15 @@ import           HEP.Data.ParserUtil              (parseEvent)
 -- Example usage:
 --
 -- > import           Pipes
--- > import qualified Pipes.Prelude            as P
+-- > import qualified Pipes.Prelude      as P
+-- > import           System.Environment
 -- > import           System.IO
--- > import           HEP.Data.HepMC.PipesUtil (getHepMCEvent)
+-- > import           HEP.Data.HepMC      (getHepMCEvent)
 -- >
--- > main = withFile infile ReadMode $ \hin ->
--- >     runEffect $ getHepMCEvent hin >-> P.print
+-- > main = do
+-- >     infile <- head <$> getArgs
+-- >     withFile infile ReadMode $ \hin ->
+-- >         runEffect $ getHepMCEvent hin >-> P.print
 getHepMCEvent :: MonadIO m => Handle -> Producer GenEvent m ()
 getHepMCEvent hin = (lift . evStr) hin >>= parseEvent hepmcEvent
   where evStr = execStateT (PA.parse hepmcHeader) . fromHandle

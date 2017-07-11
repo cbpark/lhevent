@@ -29,7 +29,6 @@ main = do
     withFile infile ReadMode $ \hin ->
         runEffect $ getLHEFEvent hin >-> P.take 3 >-> P.print
     putStrLn "-- Done parsing."
-
 ```
 
 ## References
