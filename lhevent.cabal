@@ -1,7 +1,7 @@
 name:                lhevent
 version:             0.0.0.0
 synopsis:            Tools for analyzing the Monte Carlo event data in high energy physics
-description:         https://github.com/cbpark/lhevent#readme
+description:         See https://github.com/cbpark/lhevent#readme
 homepage:            https://github.com/cbpark/lhevent
 bug-reports:         https://github.com/cbpark/lhevent/issues
 license:             BSD3
