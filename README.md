@@ -6,11 +6,15 @@ Tools for analyzing data of Monte Carlo event generators in high energy physics 
 
 [hep-utilities](https://github.com/cbpark/hep-utilities) is required (not uploaded to [Hackage](https://hackage.haskell.org) nor [Stackage](https://www.stackage.org) yet).
 
-For [Nix](https://hackage.haskell.org) users, see [`default.nix`](default.nix).
+For [Nix](https://hackage.haskell.org) users, see [`default.nix`](default.nix) and [`shell.nix`](shell.nix).
+
+``` shell
+nix-build shell.nix
+```
 
 ## Usage
 
-See codes in [test](test). If you'd use [pipes](http://hackage.haskell.org/package/pipes), see [`HEP.Data.LHEF.PipesUtil`](src/HEP/Data/LHEF/PipesUtil.hs), [`HEP.Data.LHCO.PipesUtil`](src/HEP/Data/LHCO/PipesUtil.hs), and [`HEP.Data.HepMC.PipesUtil`](src/HEP/Data/HepMC/PipesUtil.hs). For instance,
+See codes in [test](test). If you're going to use [pipes](http://hackage.haskell.org/package/pipes), see [`HEP.Data.LHEF.PipesUtil`](src/HEP/Data/LHEF/PipesUtil.hs), [`HEP.Data.LHCO.PipesUtil`](src/HEP/Data/LHCO/PipesUtil.hs), and [`HEP.Data.HepMC.PipesUtil`](src/HEP/Data/HepMC/PipesUtil.hs). For example,
 
 ``` haskell
 module Main where
